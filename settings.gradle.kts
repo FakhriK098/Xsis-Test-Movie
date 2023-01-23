@@ -1,0 +1,5 @@
+include(":app")
+includeBuild("versions")
+include(":core")
+include(":data")
+include(":domain")
