@@ -18,6 +18,14 @@ android {
         targetSdk = Android.SDK
         testInstrumentationRunner = Android.TEST_RUNNER
         consumerProguardFiles("consumer-rules.pro")
+
+        val youtubeToken: String by project
+
+        buildConfigField(
+            type = "String",
+            name = "YOUTUBE_TOKEN",
+            value = youtubeToken
+        )
     }
 
     buildTypes {
@@ -79,6 +87,8 @@ dependencies {
 
     androidTestApi(DependenciesPlugin.jUnitAndroid)
     androidTestApi(DependenciesPlugin.espresso)
+
+    implementation(files("libs/YouTubeAndroidPlayerApi.jar"))
 }
 
 kapt {

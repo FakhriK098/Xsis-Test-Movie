@@ -8,3 +8,8 @@ data class Movie(
     val backdropPath: String = "",
     val viewType: Int = 0
 )
+
+data class Video(
+    val key: String = "",
+    val official: Boolean = false
+)

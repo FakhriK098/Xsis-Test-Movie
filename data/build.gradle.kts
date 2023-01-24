@@ -17,6 +17,21 @@ android {
         minSdk = Android.MIN_SDK
         targetSdk = Android.SDK
         testInstrumentationRunner = Android.TEST_RUNNER
+
+        val baseUrl: String by project
+        val accessTokenV4: String by project
+
+        buildConfigField(
+            type = "String",
+            name = "BASE_URL",
+            value = baseUrl
+        )
+
+        buildConfigField(
+            type = "String",
+            name = "ACCESS_TOKEN_V4",
+            value = "\"$accessTokenV4\""
+        )
     }
 
     compileOptions {

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="20dp"
-    android:paddingTop="20dp">
+    android:paddingVertical="20dp">
 
     <ImageView
         android:id="@+id/ivClose"
@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivClose"/>
@@ -62,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title_latest_movie"
-        style="@style/TextViewSubTitle"
+        style="@style/TextViewTitle"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvDescMovie"/>

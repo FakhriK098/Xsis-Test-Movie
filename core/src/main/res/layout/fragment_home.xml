@@ -33,20 +33,20 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vgBannerMovie"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="220dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <LinearLayout
                 android:id="@+id/llIndicator"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"
                 android:paddingHorizontal="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
                 android:id="@+id/tvTitleLatestMovie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextViewSubTitle"
+                style="@style/TextViewTitle"
                 android:text="@string/title_latest_movie"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"

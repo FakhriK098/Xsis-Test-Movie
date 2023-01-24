@@ -3,23 +3,30 @@ package id.fakhri_khairi.core.presentation.bottom_sheet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import coil.load
+import dagger.hilt.android.AndroidEntryPoint
 import id.fakhri_khairi.core.R
 import id.fakhri_khairi.core.base.BaseDialogFragment
 import id.fakhri_khairi.core.databinding.BottomSheetMovieDetailBinding
 import id.fakhri_khairi.core.misc.convertToImageTmdbUrl
 import id.fakhri_khairi.core.presentation.adapter.MovieAdapter
 import id.fakhri_khairi.domain.Movie
+import id.fakhri_khairi.domain.Video
+import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class MovieDetailBottomSheet(
     private val onShow: () -> Unit,
     private val onDismiss: () -> Unit,
-    private val movieList: List<Movie>,
     private val movieDetail: Movie
 ) : BaseDialogFragment<BottomSheetMovieDetailBinding>() {
-
+    private val viewModel by viewModels<MovieDetailViewModel>()
     private var latestMovieAdapter = MovieAdapter("horizontal")
+    private var videoSelected : Video? = null
+    private var onVideoClick : (Video) -> Unit = {_ ->}
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -32,7 +39,8 @@ class MovieDetailBottomSheet(
 
         initAdapter()
         initListener()
-        renderMovie(movieDetail, movieList)
+        renderMovie(movieDetail)
+        viewModel.getMovieVideo(movieDetail.id)
         onShow.invoke()
     }
 
@@ -41,7 +49,11 @@ class MovieDetailBottomSheet(
             dismiss()
         }
 
-        ivPlay.setOnClickListener {  }
+        ivPlay.setOnClickListener {
+            videoSelected?.let {
+                onVideoClick(it)
+            }
+        }
     }
 
     private fun BottomSheetMovieDetailBinding.initAdapter() {
@@ -53,8 +65,8 @@ class MovieDetailBottomSheet(
         }
     }
 
-    private fun BottomSheetMovieDetailBinding.renderMovie(movie: Movie, movieList: List<Movie>) {
-        val imgUrl = movie.backdropPath.convertToImageTmdbUrl(700)
+    private fun BottomSheetMovieDetailBinding.renderMovie(movie: Movie) {
+        val imgUrl = movie.backdropPath.convertToImageTmdbUrl(500)
 
         ivPoserMovie.load(imgUrl) {
             error(R.drawable.ic_baseline_broken_image_24)
@@ -65,8 +77,10 @@ class MovieDetailBottomSheet(
             movie.overview,
             HtmlCompat.FROM_HTML_MODE_LEGACY
         )
+    }
 
-        latestMovieAdapter.setItems(movieList)
+    fun setOnVideoClicked(OnVideClick : (Video) -> Unit) {
+        onVideoClick = OnVideClick
     }
 
     override fun onDestroyView() {
@@ -76,5 +90,22 @@ class MovieDetailBottomSheet(
 
     override suspend fun BottomSheetMovieDetailBinding.setupState() {}
 
-    override suspend fun BottomSheetMovieDetailBinding.setupEvent() {}
+    override suspend fun BottomSheetMovieDetailBinding.setupEvent() {
+        viewModel.event.collect {
+            when(it) {
+                MovieDetailEvent.Empty -> {
+                    ivPlay.isVisible = false
+                }
+                is MovieDetailEvent.Error -> ivPlay.isVisible = false
+                is MovieDetailEvent.Success -> {
+                    ivPlay.isVisible = true
+                    videoSelected = it.data
+                    viewModel.getMovieRecommendation(movieDetail.id)
+                }
+                is MovieDetailEvent.SuccessGetMovieRecommendation -> {
+                    latestMovieAdapter.setItems(it.data)
+                }
+            }
+        }
+    }
 }
